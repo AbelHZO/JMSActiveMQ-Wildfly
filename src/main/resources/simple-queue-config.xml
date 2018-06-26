@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="jmsTemplateQueue" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactoryQueue" />
+		<property name="defaultDestinationName" value="#{configConnProp['connection.wildfly.queue.destination']}" />
+		<property name="pubSubDomain" value="false" />
+		<property name="messageConverter" ref="messageConverter" />
+	</bean>
+	
+	<bean id="queueConsumerBean" class="com.abelhzo.activemq.listener.QueueConsumerListener" />
+	
+	<jms:listener-container connection-factory="connectionFactoryQueue" acknowledge="auto" destination-type="queue" message-converter="messageConverter"> 
+		<jms:listener destination="#{configConnProp['connection.wildfly.queue.destination']}" ref="queueConsumerBean" method="onMessage" />
+	</jms:listener-container>
+	
+	<!-- 	Este cache es opcional -->
+	<bean id="jmsQueueCachingFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+		<property name="targetConnectionFactory"  ref="connectionFactoryQueue" />
+		<property name="sessionCacheSize" value="25" />
+		<property name="cacheProducers" value="false" />
+	</bean>
+
+</beans>

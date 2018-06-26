@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-5.0.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-5.0.xsd">
+
+	<bean id="destinationQueue" class="org.apache.activemq.artemis.jms.client.ActiveMQQueue">
+		<constructor-arg name="name" value="#{configConnProp['connection.wildfly.queue.destination']}" />
+	</bean>
+	
+	
+	<!-- Configuración de Spring Integration para Producer Topic JMS -->
+	
+	<int:publish-subscribe-channel id="jmsProducerChannelQueue" />
+	
+	<int-jms:outbound-channel-adapter id="outBoundChannelQueue"
+									  channel="jmsProducerChannelQueue"
+									  destination="destinationQueue"
+									  pub-sub-domain="true"
+									  connection-factory="connectionFactoryQueue" 
+									  message-converter="messageConverter"/>
+									  
+
+
+	<!-- Configuración de Spring Integration para Consumer Topic JMS -->									  
+									  
+	<int:publish-subscribe-channel id="jmsConsumerChannelQueue" />	
+	
+	<int-jms:message-driven-channel-adapter id="messageDrivenQueue"
+											channel="jmsConsumerChannelQueue" 
+											destination="destinationQueue" 
+											pub-sub-domain="false"
+											connection-factory="connectionFactoryQueue"
+											message-converter="messageConverter"/>									  
+
+	<bean id="serviceActivatorQueue" class="com.abelhzo.activemq.listener.QueueServiceActivator" />
+	<int:service-activator ref="serviceActivatorQueue" method="onMessage" input-channel="jmsConsumerChannelQueue" />
+	
+</beans>

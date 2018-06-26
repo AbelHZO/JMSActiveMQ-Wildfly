@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-5.0.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-5.0.xsd">
+	
+	<bean id="destinationTopic" class="org.apache.activemq.artemis.jms.client.ActiveMQTopic">
+		<constructor-arg name="name" value="#{configConnProp['connection.wildfly.topic.destination']}" />
+	</bean>
+	
+	
+	<!-- Configuración de Spring Integration para Producer Topic JMS -->
+	
+	<int:publish-subscribe-channel id="jmsProducerChannelTopic" />
+	
+	<int-jms:outbound-channel-adapter id="outBoundChannelTopic"
+									  channel="jmsProducerChannelTopic"
+									  destination="destinationTopic"
+									  pub-sub-domain="true"
+									  connection-factory="connectionFactoryTopic" 
+									  message-converter="messageConverter"/>
+									  
+
+
+	<!-- Configuración de Spring Integration para Consumer Topic JMS -->
+									  
+	<int:publish-subscribe-channel id="jmsConsumerChannelTopic" />
+	
+	<int-jms:message-driven-channel-adapter id="messageDrivenTopic"
+											channel="jmsConsumerChannelTopic" 
+											destination="destinationTopic" 
+											pub-sub-domain="true"
+											connection-factory="connectionFactoryTopic"
+											message-converter="messageConverter"/>	
+												
+	<bean id="serviceActivatorTopic" class="com.abelhzo.activemq.listener.TopicServiceActivator" />																		  	
+	<int:service-activator ref="serviceActivatorTopic" method="onMessage" input-channel="jmsConsumerChannelTopic" />																		  		
+
+</beans>
