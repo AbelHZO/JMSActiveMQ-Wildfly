@@ -12,7 +12,7 @@
 	</bean>
 	
 	
-	<!-- Configuración de Spring Integration para Producer Topic JMS -->
+	<!-- Configuración de Spring Integration para Producer Queue JMS -->
 	
 	<int:publish-subscribe-channel id="jmsProducerChannelQueue" />
 	
@@ -25,7 +25,7 @@
 									  
 
 
-	<!-- Configuración de Spring Integration para Consumer Topic JMS -->									  
+	<!-- Configuración de Spring Integration para Consumer Queue JMS -->									  
 									  
 	<int:publish-subscribe-channel id="jmsConsumerChannelQueue" />	
 	

@@ -10,7 +10,7 @@ public class QueueServiceActivator {
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
 
-//	@ServiceActivator(inputChannel = "jmsConsumerChannelTopic")
+//	@ServiceActivator(inputChannel = "jmsConsumerChannelQueue")
 	public void onMessage(InfoJmsDTO infoJmsDTO) {
 		
 		System.out.println(infoJmsDTO.getKey() + " - " + 
