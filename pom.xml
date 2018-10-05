@@ -7,13 +7,23 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>JMSActiveMQ-Wildfly Maven Webapp</name>
 	<url>http://maven.apache.org</url>
-	
+
 	<properties>
+		<!-- <project.builwild.sourceEncoding>UTF-8</project.build.sourceEncoding> -->
 		<spring.version>5.0.6.RELEASE</spring.version>
 		<wildfly.version>11.0.0.Final</wildfly.version>
 		<servlet.api.version>2.5</servlet.api.version>
+		<version.jboss.bom>14.0.1.Final</version.jboss.bom>
+		<maven.build.timestamp.format>yyyyMMdd'T'HHmmss</maven.build.timestamp.format>
+		<version.wildfly.maven.plugin>1.2.2.Final</version.wildfly.maven.plugin>
+		
+		<hostname>127.0.0.1</hostname>
+		<port>9990</port>
+		<wildflyUser>admin</wildflyUser>
+		<wildflyPass>admin</wildflyPass>
+		<warName>JMSActiveMQ-Wildfly</warName>
 	</properties>
-	
+
 	<dependencies>
 
 		<dependency>
@@ -67,7 +77,33 @@
 		</dependency>
 
 	</dependencies>
+
 	<build>
-		<finalName>JMSActiveMQ-Wildfly</finalName>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
+				<version>${version.wildfly.maven.plugin}</version>
+				<configuration>
+					<force>true</force>
+					<hostname>${hostName}</hostname>
+					<username>${jbossUser}</username>
+                	<password>${jbossPass}</password>
+                	<port>${port}</port>
+                	<fileNames>
+                    	<fileName>/${warName}.war</fileName>
+                	</fileNames>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>
