@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.abelhzo.activemq.wildfly</groupId>
-	<artifactId>JMSActiveMQ-Wildfly</artifactId>
+	<artifactId>jms-activemq-with-wildfly</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>JMSActiveMQ-Wildfly Maven Webapp</name>
+	<name>jms-activemq-with-wildfly Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -21,7 +21,7 @@
 		<port>9990</port>
 		<wildflyUser>admin</wildflyUser>
 		<wildflyPass>admin</wildflyPass>
-		<warName>JMSActiveMQ-Wildfly</warName>
+		<warName>jms-activemq-with-wildfly</warName>
 	</properties>
 
 	<dependencies>
